@@ -1,5 +1,6 @@
+VERSION = "0.1"
 CC = gcc
-CFLAGS = -DDEBUG=1
+CFLAGS = -DDEBUG=1 -DVERSION=$(VERSION)
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
 TARGET = pg

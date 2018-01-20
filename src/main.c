@@ -2,21 +2,32 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "error.h"
 #include "args.h"
 #include "generator.h"
 #include "string_t.h"
 
+#define NAME "PG"
+#ifndef VERSION
+    #define VERSION "0.0"
+#endif
+
+#define ARG_LENGTH_DFL 6
+#define ARG_UPPER_CASE_DFL false
+#define ARG_NUMBERS_DFL false
+#define ARG_SYMBOLS_DFL false
+
 int main(int argc, char* argv[]) {
-    int  arg_length = 6;
-    bool arg_upper_case = false;
-    bool arg_numbers = false;
-    bool arg_symbols = false;
+    int  arg_length = ARG_LENGTH_DFL;
+    bool arg_upper_case = ARG_UPPER_CASE_DFL;
+    bool arg_numbers = ARG_NUMBERS_DFL;
+    bool arg_symbols = ARG_SYMBOLS_DFL;
 
     for (int i = 0; i < argc; i++) {
         string_t current_arg = *(argv + i);
 
-        if (is_argument(current_arg, "-l") == true || is_argument(current_arg, "--length") == true) {
+        if (is_argument(current_arg, "-l", "--length") == true) {
             string_t arg_value = *(argv + (i + 1));
 
             if (value_exists(arg_value) == true) {
@@ -27,20 +38,19 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        if (is_argument(current_arg, "-uc") == true || is_argument(current_arg, "--upper-case") == true) {
+        if (is_argument(current_arg, "-uc", "--uppercase") == true) {
             arg_upper_case = true;
         }
 
-        if (is_argument(current_arg, "-n") == true || is_argument(current_arg, "--numbers") == true) {
+        if (is_argument(current_arg, "-n", "--numbers") == true) {
             arg_numbers = true;
         }
 
-        if (is_argument(current_arg, "-s") == true || is_argument(current_arg, "--symbols") == true) {
+        if (is_argument(current_arg, "-s", "--symbols") == true) {
             arg_symbols = true;
         }
     }
 
-    // The actual result given to the user
     string_t result = generate_password(arg_length, arg_upper_case, arg_numbers, arg_symbols);
     printf(result);
 
